@@ -6,20 +6,15 @@ import java.util.Random;
 // Message class used for creating, validating, sending and storing messages
 public class Message {
 
-    // Message details
     private String messageID;
     private int messageNumber;
     private String recipient;
     private String messageText;
     private String messageHash;
 
-    // Stores messages that were successfully sent
     private static ArrayList<Message> sentMessages = new ArrayList<>();
-
-    // Tracks total number of sent messages
     private static int totalMessagesSent = 0;
 
-    // Constructor
     public Message(int messageNumber, String recipient, String messageText) {
         this.messageID = generateMessageID();
         this.messageNumber = messageNumber;
@@ -28,7 +23,6 @@ public class Message {
         this.messageHash = createMessageHash();
     }
 
-    // Generates a random 10-digit message ID
     private String generateMessageID() {
         Random random = new Random();
         StringBuilder id = new StringBuilder();
@@ -40,12 +34,10 @@ public class Message {
         return id.toString();
     }
 
-    // Checks if the message ID is no more than 10 characters
     public boolean checkMessageID() {
         return messageID.length() <= 10;
     }
 
-    // Checks if the recipient number has an international code
     public String checkRecipientCell() {
         if (recipient.startsWith("+") && recipient.length() <= 13) {
             return "Cell phone number successfully captured.";
@@ -54,7 +46,6 @@ public class Message {
         return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
     }
 
-    // Checks if the message is not more than 250 characters
     public String checkMessageLength() {
         if (messageText.length() <= 250) {
             return "Message ready to send.";
@@ -67,7 +58,6 @@ public class Message {
                 + ", please reduce size.";
     }
 
-    // Creates the required message hash
     public String createMessageHash() {
         String[] words = messageText.trim().split("\\s+");
 
@@ -82,7 +72,6 @@ public class Message {
                 + lastWord).toUpperCase();
     }
 
-    // Allows the user to send, disregard or store a message
     public String sentMessage(int option) {
         switch (option) {
             case 1:
@@ -102,23 +91,15 @@ public class Message {
         }
     }
 
-    // Returns message details as text
+    // Full message details shown after sending
     public String printMessages() {
         return "Message ID: " + messageID
+                + "\nMessage Number: " + messageNumber
                 + "\nMessage Hash: " + messageHash
                 + "\nRecipient: " + recipient
                 + "\nMessage: " + messageText;
     }
 
-    // Displays all recently sent messages
-    public static void displaySentMessages() {
-        for (Message message : sentMessages) {
-            System.out.println("\n--------------------------------");
-            System.out.println(message.printMessages());
-        }
-    }
-
-    // Returns total number of messages sent
     public static int returnTotalMessages() {
         return totalMessagesSent;
     }
@@ -128,6 +109,7 @@ public class Message {
         try (FileWriter writer = new FileWriter("stored_messages.json", true)) {
             writer.write("{\n");
             writer.write("\"messageID\": \"" + messageID + "\",\n");
+            writer.write("\"messageNumber\": \"" + messageNumber + "\",\n");
             writer.write("\"messageHash\": \"" + messageHash + "\",\n");
             writer.write("\"recipient\": \"" + recipient + "\",\n");
             writer.write("\"message\": \"" + messageText + "\"\n");
@@ -135,5 +117,14 @@ public class Message {
         } catch (IOException e) {
             System.out.println("Error storing message: " + e.getMessage());
         }
+    }
+
+    public String getMessageID() {
+        return messageID;
+    }
+
+    public static void clearSentMessages() {
+        sentMessages.clear();
+        totalMessagesSent = 0;
     }
 }

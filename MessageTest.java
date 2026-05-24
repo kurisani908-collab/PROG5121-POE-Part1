@@ -1,11 +1,8 @@
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-// Unit test class
 public class MessageTest {
 
-    // Test valid message length
     @Test
     public void testMessageLengthSuccess() {
 
@@ -22,12 +19,10 @@ public class MessageTest {
         );
     }
 
-    // Test invalid message length
     @Test
     public void testMessageLengthFailure() {
 
-        String longMessage =
-                "A".repeat(260);
+        String longMessage = "A".repeat(260);
 
         Message message =
                 new Message(
@@ -42,7 +37,6 @@ public class MessageTest {
         );
     }
 
-    // Test recipient success
     @Test
     public void testRecipientSuccess() {
 
@@ -59,7 +53,6 @@ public class MessageTest {
         );
     }
 
-    // Test recipient failure
     @Test
     public void testRecipientFailure() {
 
@@ -76,7 +69,6 @@ public class MessageTest {
         );
     }
 
-    // Test message ID
     @Test
     public void testMessageIDCreated() {
 
@@ -87,14 +79,14 @@ public class MessageTest {
                         "Hello there"
                 );
 
-        assertTrue(
-                message.checkMessageID()
-        );
+        assertTrue(message.checkMessageID());
+        assertEquals(10, message.getMessageID().length());
     }
 
-    // Test send message
     @Test
-    public void testSentMessage() {
+    public void testSendMessage() {
+
+        Message.clearSentMessages();
 
         Message message =
                 new Message(
@@ -109,7 +101,6 @@ public class MessageTest {
         );
     }
 
-    // Test disregard message
     @Test
     public void testDisregardMessage() {
 
@@ -126,7 +117,6 @@ public class MessageTest {
         );
     }
 
-    // Test store message
     @Test
     public void testStoreMessage() {
 
