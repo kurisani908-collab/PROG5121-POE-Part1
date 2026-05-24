@@ -1,88 +1,170 @@
 import java.util.Scanner;
 
-/**
- * PROG5121POE.java
- *
- * Entry point for the PROG5121 POE Registration and Login application.
- * Validates each field immediately after input and re-prompts on failure.
- *
- * @author  Kurisani Baloyi
- * @version 1.0
- */
+// Main application class
 public class PROG5121POE {
 
     public static void main(String[] args) {
 
+        // Scanner object for suser input
         Scanner scanner = new Scanner(System.in);
+        
 
-        System.out.println("=== PROG5121 POE — Registration & Login ===\n");
+        // Welcome message required in instructions
+        System.out.println("Welcome to QuickChat.");
 
-        // ── Step 1: Registration ─────────────────────────────────────────────
-        System.out.println("--- REGISTRATION ---");
+        // Controls application loop
+        boolean running = true;
 
-        // Username: keep asking until valid
-        String username;
-        while (true) {
-            System.out.print("Enter username: ");
-            username = scanner.nextLine();
-            Registration usernameCheck = new Registration(username, "Placeholder1!", "+271234567");
-            if (usernameCheck.checkUserName()) {
-                System.out.println("Username successfully captured.\n");
-                break;
-            } else {
-                System.out.println("Username is not correctly formatted; please ensure that "
-                        + "your username contains an underscore and is no more than five "
-                        + "characters in length.\n");
+        // While loop keeps application running
+        while (running) {
+
+            // Display menu options
+            System.out.println("\nSelect an option:");
+            System.out.println("1) Send Messages");
+            System.out.println("2) Show recently sent messages");
+            System.out.println("3) Quit");
+
+            // Capture menu option
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+
+                // Option 1 - Send Messages
+                case 1:
+
+                    // Ask user how many messages they want to send
+                    System.out.print("How many messages would you like to send? ");
+
+                    int numberOfMessages = scanner.nextInt();
+                    scanner.nextLine();
+
+                    // For loop for messages
+                    for (int i = 1; i <= numberOfMessages; i++) {
+
+                        System.out.println("\nMessage " + i);
+
+                        String recipient;
+
+                        // Keep asking until recipient number is valid
+                        while (true) {
+
+                            System.out.print("Enter recipient number: ");
+                            recipient = scanner.nextLine();
+
+                            // Validate cellphone number
+                            if (recipient.startsWith("+")
+                                    && recipient.length() <= 13) {
+
+                                System.out.println(
+                                        "Cell phone number successfully captured."
+                                );
+
+                                break;
+                            }
+
+                            // Invalid number message
+                            System.out.println(
+                                    "Cell phone number is incorrectly formatted "
+                                            + "or does not contain an international code. "
+                                            + "Please correct the number and try again."
+                            );
+                        }
+
+                        String messageText;
+
+                        // Keep asking until message length is valid
+                        while (true) {
+
+                            System.out.print("Enter your message: ");
+                            messageText = scanner.nextLine();
+
+                            // Validate message length
+                            if (messageText.length() <= 250) {
+
+                                System.out.println(
+                                        "Message ready to send."
+                                );
+
+                                break;
+                            }
+
+                            // Display excess characters
+                            int excessCharacters =
+                                    messageText.length() - 250;
+
+                            System.out.println(
+                                    "Message exceeds 250 characters by "
+                                            + excessCharacters
+                                            + ", please reduce size."
+                            );
+                        }
+
+                        // Create message object
+                        Message message =
+                                new Message(
+                                        i,
+                                        recipient,
+                                        messageText
+                                );
+
+                        // Display message options
+                        System.out.println("\nChoose message action:");
+                        System.out.println("1) Send Message");
+                        System.out.println("2) Disregard Message");
+                        System.out.println("3) Store Message");
+
+                        // Capture action
+                        int action = scanner.nextInt();
+                        scanner.nextLine();
+
+                        // Display action result
+                        System.out.println(
+                                message.sentMessage(action)
+                        );
+
+                        // Display message details if sent
+                        if (action == 1) {
+
+                            System.out.println(
+                                    "\n" + message.printMessages()
+                            );
+                        }
+                    }
+
+                    // Display total messages sent
+                    System.out.println(
+                            "\nTotal messages sent: "
+                                    + Message.returnTotalMessages()
+                    );
+
+                    break;
+
+                // Option 2
+                // Per instructions this feature is still in development
+                case 2:
+
+                    System.out.println("Coming Soon.");
+                    break;
+
+                // Option 3 - Quit application
+                case 3:
+
+                    running = false;
+
+                    System.out.println("Goodbye.");
+                    break;
+
+                // Invalid menu option
+                default:
+
+                    System.out.println(
+                            "Invalid option selected."
+                    );
             }
         }
 
-        // Password: keep asking until valid
-        String password;
-        while (true) {
-            System.out.print("Enter password: ");
-            password = scanner.nextLine();
-            Registration passwordCheck = new Registration(username, password, "+271234567");
-            if (passwordCheck.checkPasswordComplexity()) {
-                System.out.println("Password successfully captured.\n");
-                break;
-            } else {
-                System.out.println("Password is not correctly formatted; please ensure that "
-                        + "the password contains at least eight characters, a capital letter, "
-                        + "a number, and a special character.\n");
-            }
-        }
-
-        // Cell phone: keep asking until valid
-        String cellPhoneNumber;
-        while (true) {
-            System.out.print("Enter cell phone number (e.g. +27838968976): ");
-            cellPhoneNumber = scanner.nextLine();
-            Registration cellCheck = new Registration(username, password, cellPhoneNumber);
-            if (cellCheck.checkCellPhoneNumber()) {
-                System.out.println("Cell number successfully captured.\n");
-                break;
-            } else {
-                System.out.println("Cell number is incorrectly formatted or does not contain "
-                        + "an international code; please correct the number and try again.\n");
-            }
-        }
-
-        System.out.println("Registration successful!\n");
-
-        // ── Step 2: Login ────────────────────────────────────────────────────
-        System.out.println("--- LOGIN ---");
-
-        Registration registration = new Registration(username, password, cellPhoneNumber);
-
-        System.out.print("Enter username: ");
-        String enteredUsername = scanner.nextLine();
-
-        System.out.print("Enter password: ");
-        String enteredPassword = scanner.nextLine();
-
-        Login login = new Login(registration, enteredUsername, enteredPassword);
-        System.out.println("\n" + login.returnLoginStatus());
-
+        // Close scanner
         scanner.close();
     }
 }
