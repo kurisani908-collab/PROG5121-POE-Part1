@@ -5,7 +5,7 @@ public class PROG5121POE {
 
     public static void main(String[] args) {
 
-        // Scanner object for suser input
+        // Scanner object for user input
         Scanner scanner = new Scanner(System.in);
         
 
