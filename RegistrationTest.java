@@ -5,9 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * RegistrationTest.java
  *
- * Unit tests for the {@link Registration} class.
+ * Unit tests
  * Tests cover all validation methods and the registerUser() message output.
- * Each test maps directly to a test case specified in the PROG5121 POE rubric.
  *
  * @author  Kurisani Baloyi
  * @version 1.0
